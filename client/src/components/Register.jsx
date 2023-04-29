@@ -1,11 +1,43 @@
 import React, { useState } from 'react'
 import Navbar from './Navbar';
 import BottomFooter from './subcomponents/BottomFooter'
+import axios from 'axios';
+import {useNavigate} from "react-router-dom"
 
 export default function Register() {
+    const [firstname, setFirstname] = useState("");
+    const [lastname, setLastname] = useState("");
+    const [telephone, setTelephone] = useState("")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
     const [sex, setSex] = useState("not specified");
+    const [birthday, setBirthday] = useState();
+
     const [readContract, setReadContract] = useState(false);
     const [acceptNews, setAcceptNews] = useState(false);
+
+    const navigate = useNavigate();
+    const handleRegister = () => {
+        // Prevent sending value when Don't readContract or button disabled 
+        if (readContract) {
+            axios.post('http://localhost:3000/register', {
+                email: email,
+                password: password,
+                firstname: firstname,
+                lastname: lastname,
+                telephone: telephone,
+                sex: sex,
+                birthday: birthday,
+            }).then(
+                (res) => {
+                    alert(res.data.message)
+                    navigate("/")
+                }
+            )
+        }
+
+    }
+
     return (
         <>
             <Navbar />
@@ -20,24 +52,24 @@ export default function Register() {
                     <div className="flex flex-row w-full justify-center gap-[16px]">
                         <div className="flex flex-col font-Kanit gap-[8px]">
                             <p className="text-[14px] font-light">ชื่อ</p>
-                            <input type="text" className="w-[192px] h-[48px] py-[4px] px-[11px] rounded-[10px] border border-[#d2d2d2] text-[14px] font-light outline-0" placeholder="กรอกชื่อ" />
+                            <input type="text" className="w-[192px] h-[48px] py-[4px] px-[11px] rounded-[10px] border border-[#d2d2d2] text-[14px] font-light outline-0" placeholder="กรอกชื่อ" onChange={(e) => { setFirstname(e.target.value) }} />
                         </div>
                         <div className="flex flex-col font-Kanit gap-[8px]">
                             <p className="text-[14px] font-light">นามสกุล</p>
-                            <input type="text" className="w-[192px] h-[48px] py-[4px] px-[11px] rounded-[10px] border border-[#d2d2d2] text-[14px] font-light outline-0" placeholder="กรอกนามสกุล" />
+                            <input type="text" className="w-[192px] h-[48px] py-[4px] px-[11px] rounded-[10px] border border-[#d2d2d2] text-[14px] font-light outline-0" placeholder="กรอกนามสกุล" onChange={(e) => { setLastname(e.target.value) }} />
                         </div>
                     </div>
                     <div className="flex flex-col font-Kanit gap-[8px]">
                         <p className="text-[14px] font-light">เบอร์โทรศัพท์</p>
-                        <input type="text" className="w-[400px] h-[48px] py-[4px] px-[11px] rounded-[10px] border border-[#d2d2d2] text-[14px] font-light outline-0" placeholder="กรอกเบอร์โทรศัพท์" />
+                        <input type="text" className="w-[400px] h-[48px] py-[4px] px-[11px] rounded-[10px] border border-[#d2d2d2] text-[14px] font-light outline-0" placeholder="กรอกเบอร์โทรศัพท์" onChange={(e) => { setTelephone(e.target.value) }} />
                     </div>
                     <div className="flex flex-col font-Kanit gap-[8px]">
                         <p className="text-[14px] font-light">อีเมล</p>
-                        <input type="text" className="w-[400px] h-[48px] py-[4px] px-[11px] rounded-[10px] border border-[#d2d2d2] text-[14px] font-light outline-0" placeholder="กรอกอีเมล" />
+                        <input type="text" className="w-[400px] h-[48px] py-[4px] px-[11px] rounded-[10px] border border-[#d2d2d2] text-[14px] font-light outline-0" placeholder="กรอกอีเมล" onChange={(e) => { setEmail(e.target.value) }} />
                     </div>
                     <div className="flex flex-col font-Kanit gap-[8px]">
                         <p className="text-[14px] font-light">รหัสผ่าน</p>
-                        <input type="password" className="w-[400px] h-[48px] py-[4px] px-[11px] rounded-[10px] border border-[#d2d2d2] text-[14px] font-light outline-0" placeholder="กรอกรหัสผ่าน" />
+                        <input type="password" className="w-[400px] h-[48px] py-[4px] px-[11px] rounded-[10px] border border-[#d2d2d2] text-[14px] font-light outline-0" placeholder="กรอกรหัสผ่าน" onChange={(e) => { setPassword(e.target.value) }} />
                     </div>
                     <div className="w-[400px] flex flex-col font-Kanit gap-[8px]">
                         <p className="text-[14px] font-light">เพศ(ไม่ระบุได้)</p>
@@ -49,7 +81,7 @@ export default function Register() {
                     </div>
                     <div className="flex flex-col font-Kanit gap-[8px]">
                         <p className="text-[14px] font-light">ของขวัญวันเกิดรอคุณอยู่</p>
-                        <input type="date" className="w-[400px] h-[48px] py-[4px] px-[11px] rounded-[10px] border border-[#d2d2d2] text-[14px] font-light outline-0 text-[#a5a5a5]" />
+                        <input type="date" className="w-[400px] h-[48px] py-[4px] px-[11px] rounded-[10px] border border-[#d2d2d2] text-[14px] font-light outline-0 text-[#a5a5a5]" onChange={(e) => setBirthday(e.target.value)} />
                     </div>
                     <label className="flex flex-row items-start gap-[8px]">
                         <div className="w-[16px] h-[16px] rounded-[50px] border border-[#e21c23] flex flex-row justify-center items-center" onClick={() => setReadContract(!readContract)}>
@@ -75,12 +107,13 @@ export default function Register() {
                             เพิ่มเติมได้ที่เว็บไซต์ของบริษัทฯ
                         </p>
                     </label>
-                    <button className={`${readContract ? "text-white bg-[#e21c23] " : "text-[#787878] bg-[#f4f4f4]"} w-[400px] h-[48px] transition duration-500 text-[14px] font-Kanit  font-light rounded-[30px]`}>
+                    <button id="btt" className={`${readContract ? "text-white bg-[#e21c23]" : "text-[#787878] bg-[#f4f4f4] "} w-[400px] h-[48px] transition duration-500 text-[14px] font-Kanit  font-light rounded-[30px]`}
+                        onClick={handleRegister}>
                         สมัครสมาชิก
                     </button>
                 </div>
             </div>
-            <BottomFooter/>
+            <BottomFooter />
         </>
     )
 }

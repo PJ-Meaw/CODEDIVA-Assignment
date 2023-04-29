@@ -4,7 +4,6 @@ import BottomFooter from './subcomponents/BottomFooter'
 export default function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [isFill, setIsFill] = useState(false)
     return (
         <>
             <div className="w-full h-screen pt-[72px] bg-[#f4f4f4]">
