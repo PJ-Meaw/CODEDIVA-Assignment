@@ -1,14 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
-import { useNavigate } from "react-router-dom"
+import { useNavigate,useLocation } from "react-router-dom"
 import HamberkerBar from './subcomponents/HamberkerBar'
 
 export default function Navbar() {
     const navigate = useNavigate()
     const [navAuthen, setNavAuthen] = useState(0)
     const [isOpen, setIsOpen] = useState(false)
-    const btnRef = useRef();
-    const btnRef2 = useRef();
+    const location = useLocation();
 
     useEffect(() => {
         axios.post("http://localhost:3000/auth", {
@@ -18,12 +17,11 @@ export default function Navbar() {
             }
         }).then(
             async (res) => {
-                if (res.data.status == "success") {
-                    // alert(res.data.message)
+                if (res.data.status == "success") { // Authen Success
                     setNavAuthen(1)
-                } else {
-                    // alert(res.data.message)
-                    navigate("/login")
+                    if(location.pathname == "/login"){
+                        navigate("/")
+                    }
                 }
             }
         )
