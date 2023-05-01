@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import cors from 'cors';
 import bcrypt from 'bcrypt';
 import { collection, addDoc, doc, setDoc, query, where, getDocs } from "firebase/firestore";
+import { getStorage, ref, getMetadata, getDownloadURL } from "firebase/storage";
 import { db } from "./firebase-config.js"
 import jwt from "jsonwebtoken";
 
@@ -71,35 +72,27 @@ app.post('/auth', async (req, res) => {
     try {
         const token = req.headers.authorization.split(" ")[1]
         const decoded = jwt.verify(token, secretPassword);
-        return res.status(200).json({ status:"success", message: "Authen success" })
+        return res.status(200).json({ status: "success", message: "Authen success" })
     } catch (err) {
-        return res.json({status: "fail", message: err.message})
+        return res.json({ status: "fail", message: err.message })
     }
 
 })
 
 app.post('/test', async (req, res) => {
     try {
-        // const docRef = await addDoc(collection(db, "cities"), {
-        //     email: req.body.email,
-        //     password: req.body.password,
-        //     firstname: req.body.firstname,
-        //     lastname: req.body.lastname,
-        //     telephone: req.body.telephone,
-        //     sex: req.body.sex,
-        //     birthday: req.body.birthday,
-        // });
-        // console.log("Document written with ID: ", docRef.id);
-        // return res.status(200).json({ status: "200", message: "Register Successful!" })
-        await setDoc(doc(db, "meaw", "LA"), {
-            name: "Los Angeles",
-            state: "CA",
-            country: "USA"
-        });
-        return res.status(200).json({ status: "200", message: "Successful!" })
+        const storage = getStorage();
+        const forestRef = ref(storage, 'Promotion/636218_4_TH.jfif');
+        getDownloadURL(ref(storage, 'Promotion/636218_4_TH.jfif'))
+            .then((url) => {
+                return res.status(200).json({ status: "200", message: url })
+            })
+            .catch((error) => {
+                return res.status(200).json({ status: "200", message: error.message })
+            });
 
     } catch (err) {
-        return res.status(500).json({ status: "500", message: err })
+        return res.status(500).json({ status: "500", message: err.message })
     }
 
 })

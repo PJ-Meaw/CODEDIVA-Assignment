@@ -22,10 +22,13 @@ export default function Navbar() {
                     if(location.pathname == "/login"){
                         navigate("/")
                     }
+                }else if (res.data.message == "jwt expired"){
+                    localStorage.removeItem("token")
+                }else{
+                    console.log(res.data.message)
                 }
             }
         )
-
     }, [])
 
     
