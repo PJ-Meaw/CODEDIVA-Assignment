@@ -79,10 +79,25 @@ app.post('/auth', async (req, res) => {
 
 })
 
+app.get('/menu', async (req, res) => {
+    const array = [];    
+    try {
+        const querySnapshot = await getDocs(collection(db, "menu"));
+        querySnapshot.forEach(async (doc) => {
+            // doc.data() is never undefined for query doc snapshots
+
+            array.push(doc.data())
+        });
+        return res.status(200).json({ status: "200", menu: array })
+    } catch (err) {
+        return res.status(500).json({ status: "500", message: err.message })
+    }
+
+})
+
 app.post('/test', async (req, res) => {
     try {
         const storage = getStorage();
-        const forestRef = ref(storage, 'Promotion/636218_4_TH.jfif');
         getDownloadURL(ref(storage, 'Promotion/636218_4_TH.jfif'))
             .then((url) => {
                 return res.status(200).json({ status: "200", message: url })
@@ -91,6 +106,22 @@ app.post('/test', async (req, res) => {
                 return res.status(200).json({ status: "200", message: error.message })
             });
 
+    } catch (err) {
+        return res.status(500).json({ status: "500", message: err.message })
+    }
+
+})
+
+app.post('/addmenu', async (req, res) => {
+    try {
+        const docRef = await addDoc(collection(db, "menu"), {
+            category: req.body.category,
+            image: req.body.image,
+            message: req.body.message,
+            price: req.body.price
+        });
+        console.log("Document written with ID: ", docRef.id);
+        return res.status(200).json({ status: "200", message: "Add Successful!" })
     } catch (err) {
         return res.status(500).json({ status: "500", message: err.message })
     }
